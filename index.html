@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SA Taxpayer Invoice Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; margin: 0; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input[type="number"] { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .result { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SA Taxpayer Invoice Calculator</h1>
+    <p>Enter your annual salary (in Rands):</p>
+    <input type="number" id="salary" placeholder="e.g., 500000">
+    <button onclick="calculateTax()">Calculate</button>
+    <div id="result" class="result"></div>
+  </div>
+  <script>
+    function calculateTax() {
+      var salary = parseFloat(document.getElementById("salary").value);
+      if (isNaN(salary)) {
+        document.getElementById("result").innerText = "Please enter a valid salary.";
+        return;
+      }
+      
+      // Assumptions: 30% income tax, 80% of net income spent on VATable goods, VAT at 15%
+      var incomeTax = salary * 0.30;
+      var netIncome = salary - incomeTax;
+      var vatSpending = netIncome * 0.80;
+      var vatPaid = vatSpending * 0.15;
+      
+      // Calculate lifetime taxes:
+      var workingYears = 45; // Age 20 to 65
+      var spendingYears = 55; // Age 20 to 75
+      var lifetimeIncomeTax = incomeTax * workingYears;
+      var lifetimeVAT = vatPaid * spendingYears;
+      var lifetimeTax = lifetimeIncomeTax + lifetimeVAT;
+      
+      // Total lifetime days over 75 years:
+      var lifetimeDays = 75 * 365;
+      var dailyTaxBurden = lifetimeTax / lifetimeDays;
+      
+      document.getElementById("result").innerHTML = 
+        "<strong>Your Estimated Daily Tax Burden:</strong><br>" +
+        "Income Tax (45 years): R" + lifetimeIncomeTax.toFixed(2) + "<br>" +
+        "VAT (55 years): R" + lifetimeVAT.toFixed(2) + "<br>" +
+        "Total Lifetime Tax: R" + lifetimeTax.toFixed(2) + "<br>" +
+        "Daily Tax Burden: R" + dailyTaxBurden.toFixed(2);
+    }
+  </script>
+</body>
+</html>
